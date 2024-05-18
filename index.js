@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -8,7 +7,6 @@ const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Додано для парсингу JSON для методу DELETE
 
 // Підключення до бази даних MongoDB
 mongoose.connect('mongodb://localhost:27017/financial_app', {
@@ -40,73 +38,14 @@ const expenseSchema = new mongoose.Schema({
 
 const Expense = mongoose.model('Expense', expenseSchema);
 
-// Маршрути для доходів
-app.get('/api/earnings', async (req, res) => {
-  try {
-    const earnings = await Earning.find();
-    res.json(earnings);
-  } catch (err) {
-    console.error('Помилка отримання даних про доходи:', err);
-    res.status(500).send('Помилка сервера');
-  }
+// Маршрути для доходів, витрат і т. д.
+
+// Додати маршрут для кореневого шляху
+app.get('/', (req, res) => {
+  res.send('Welcome to my website!');
 });
 
-app.post('/api/earnings/add', async (req, res) => {
-  try {
-    const newEarning = new Earning(req.body);
-    await newEarning.save();
-    res.status(201).send('Дохід успішно додано');
-  } catch (err) {
-    console.error('Помилка додавання доходу:', err);
-    res.status(500).send('Помилка сервера');
-  }
-});
-
-// Маршрути для витрат
-app.get('/api/expenses', async (req, res) => {
-  try {
-    const expenses = await Expense.find();
-    res.json(expenses);
-  } catch (err) {
-    console.error('Помилка отримання даних про витрати:', err);
-    res.status(500).send('Помилка сервера');
-  }
-});
-
-app.post('/api/expenses/add', async (req, res) => {
-  try {
-    const newExpense = new Expense(req.body);
-    await newExpense.save();
-    res.status(201).send('Витрати успішно додано');
-  } catch (err) {
-    console.error('Помилка додавання витрат:', err);
-    res.status(500).send('Помилка сервера');
-  }
-});
-
-// Маршрути для видалення обраних доходів
-app.delete('/api/earnings/delete', async (req, res) => {
-  try {
-    const { ids } = req.body;
-    await Earning.deleteMany({ _id: { $in: ids } });
-    res.status(200).send('Доходи успішно видалено');
-  } catch (err) {
-    console.error('Помилка видалення обраних доходів:', err);
-    res.status(500).send('Помилка сервера');
-  }
-});
-
-// Маршрути для видалення обраних витрат
-app.delete('/api/expenses/delete', async (req, res) => {
-  try {
-    const { ids } = req.body;
-    await Expense.deleteMany({ _id: { $in: ids } });
-    res.status(200).send('Витрати успішно видалено');
-  } catch (err) {
-    console.error('Помилка видалення обраних витрат:', err);
-    res.status(500).send('Помилка сервера');
-  }
-});
+// Маршрути для доходів, витрат і т. д.
 
 // Запуск сервера
 app.listen(PORT, () => {
