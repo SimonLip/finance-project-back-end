@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Додано для парсингу JSON для методу DELETE
 
 // Підключення до бази даних MongoDB
 mongoose.connect('mongodb://localhost:27017/financial_app', {
@@ -83,10 +84,8 @@ app.post('/api/expenses/add', async (req, res) => {
   }
 });
 
-// server.js
-
-// Маршрут для видалення обраних доходів
-app.post('/api/earnings/delete', async (req, res) => {
+// Маршрути для видалення обраних доходів
+app.delete('/api/earnings/delete', async (req, res) => {
   try {
     const { ids } = req.body;
     await Earning.deleteMany({ _id: { $in: ids } });
@@ -97,8 +96,8 @@ app.post('/api/earnings/delete', async (req, res) => {
   }
 });
 
-// Маршрут для видалення обраних витрат
-app.post('/api/expenses/delete', async (req, res) => {
+// Маршрути для видалення обраних витрат
+app.delete('/api/expenses/delete', async (req, res) => {
   try {
     const { ids } = req.body;
     await Expense.deleteMany({ _id: { $in: ids } });
@@ -108,7 +107,6 @@ app.post('/api/expenses/delete', async (req, res) => {
     res.status(500).send('Помилка сервера');
   }
 });
-
 
 // Запуск сервера
 app.listen(PORT, () => {
