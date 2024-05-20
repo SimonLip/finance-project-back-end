@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Підключення до бази даних MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/financial_app', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://SimonLip4:stas200268@cluster0.farrcl7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
