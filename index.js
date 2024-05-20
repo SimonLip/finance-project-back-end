@@ -38,6 +38,11 @@ const expenseSchema = new mongoose.Schema({
 
 const Expense = mongoose.model('Expense', expenseSchema);
 
+// Основний маршрут для перевірки роботи сервера
+app.get('/', (req, res) => {
+  res.send('Сервер працює!');
+});
+
 // Маршрути для доходів
 app.get('/api/earnings', async (req, res) => {
   try {
@@ -109,7 +114,7 @@ app.post('/api/expenses/delete', async (req, res) => {
 });
 
 app.use((req, res, next) => {
-  res.status(404).send('Sorry, that route does not exist.');
+  res.status(404).send('Вибачте, цей маршрут не існує.');
 });
 
 // Запуск сервера
