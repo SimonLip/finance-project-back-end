@@ -5,11 +5,9 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Підключення до бази даних MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://SimonLip4:stas200268@cluster0.farrcl7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -21,7 +19,6 @@ db.once('open', () => {
   console.log('Підключено до бази даних MongoDB');
 });
 
-// Схеми та моделі
 const earningSchema = new mongoose.Schema({
   source: String,
   amount: Number,
@@ -38,12 +35,10 @@ const expenseSchema = new mongoose.Schema({
 
 const Expense = mongoose.model('Expense', expenseSchema);
 
-// Основний маршрут для перевірки роботи сервера
 app.get('/', (req, res) => {
   res.send('Сервер працює!');
 });
 
-// Маршрути для доходів
 app.get('/api/earnings', async (req, res) => {
   try {
     const earnings = await Earning.find();
@@ -66,7 +61,6 @@ app.post('/api/earnings/add', async (req, res) => {
   }
 });
 
-// Маршрути для витрат
 app.get('/api/expenses', async (req, res) => {
   try {
     const expenses = await Expense.find();
@@ -89,7 +83,6 @@ app.post('/api/expenses/add', async (req, res) => {
   }
 });
 
-// Маршрут для видалення обраних доходів
 app.post('/api/earnings/delete', async (req, res) => {
   try {
     const { ids } = req.body;
@@ -101,7 +94,6 @@ app.post('/api/earnings/delete', async (req, res) => {
   }
 });
 
-// Маршрут для видалення обраних витрат
 app.post('/api/expenses/delete', async (req, res) => {
   try {
     const { ids } = req.body;
@@ -117,7 +109,6 @@ app.use((req, res, next) => {
   res.status(404).send('Вибачте, цей маршрут не існує.');
 });
 
-// Запуск сервера
 app.listen(PORT, () => {
   console.log(`Сервер запущено на порті ${PORT}`);
 });
